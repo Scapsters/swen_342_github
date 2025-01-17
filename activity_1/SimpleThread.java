@@ -1,10 +1,10 @@
-package src;
+package activity_1;
 
 import java.util.Random;
 
 public class SimpleThread extends Thread {
     
-    private Random random = new Random(1);
+    private Random random = new Random();
     private String stringToPrint;
 
     public SimpleThread(String stringToPrint) {
