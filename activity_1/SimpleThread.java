@@ -30,11 +30,4 @@ public class SimpleThread extends Thread {
         }
         System.out.println("Thread " + stringToPrint + " is done!");
     }
-
-    public static void main(String[] args) {
-        SimpleThread hiThread = new SimpleThread("hi");
-        SimpleThread hoThread = new SimpleThread("ho");
-        hiThread.start();
-        hoThread.start();
-    }
 }
