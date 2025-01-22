@@ -1,4 +1,4 @@
-package activity_1;
+package java;
 
 public class TwoThreadTest {
     public static void main(String[] args) {

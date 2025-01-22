@@ -1,4 +1,4 @@
-package activity_1;
+package java;
 
 import java.util.Random;
 
