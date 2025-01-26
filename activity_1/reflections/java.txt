@@ -1,0 +1,1 @@
+this was pretty trivial since CS-127 taught pretty much exactly this. Was a decent refresher on thread syntax

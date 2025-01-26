@@ -1,0 +1,14 @@
+this kinda does more than just threads counting but barely. 
+There is an additional thread receiving messages from each thread. This is optional, i could've used println, but it seemed interesting.
+I also factored out thread creation for some reason.
+It's so syntactically dense yet also so much text.
+
+unwrap() is weird
+they are like Java Optionals but youre forced to use them for safety
+Results are like, what you asked for, along with maybe an error message, and maybe its just None
+threads use them a lot, making this more gross than a normal rust program
+
+it means you can pass a Result around for as long as you want before dealing with any errors? im sure it lets you do other things. but there are cases where a Result is 100% guaranteed to be the value you expect, so many unwrap()s are useless
+it kinda is. youre given a couple useful ones so its not as http'y, like unwrap_or(func) so itll execute func if anything other than an OK is received
+
+
