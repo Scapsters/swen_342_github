@@ -16,7 +16,7 @@ fn main() {
         }
     });
 
-    threads.into_iter().for_each(|handle| handle.join().unwrap());
+    threads.iter().for_each(|handle| handle.join().unwrap());
 }
 
 fn build_thread(name: String, tx: mpsc::Sender<String>, n: u8) -> thread::JoinHandle<()> {
