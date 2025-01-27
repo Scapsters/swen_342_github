@@ -1,0 +1,19 @@
+rust is interesting with how its polymorphism is structured. 
+no inheritnece (unless you really really want) but you get this:
+
+the implementation details of the "interface" (the trait RandomVariant) 
+are able to be localized to the file its in. This now lets you view all implementations for all 
+classes in one place, as opposed to only being able to view the functions of a class in that class. 
+This is kind of potentially gross but is really nice for extending functionality without needing like a decorator pattern.
+
+of course this is for in general. the reason i even had to do this is because without extra dependencies, 
+theres no way to get a collection of the keys of an enum...... or even to index it by integer, 
+even though each enum value (string of city name) has an integer value alongside it
+
+i dont think ill ever NEED to use rust in my life unless i seek it out. maybe government jobs that want code for their very slow machines?
+the options it gives to me simply arent very exciting
+
+being performant in these kinds of languages isnt even free either, theres still tons of ways to write inefficient code. 
+at least in C. poorly optimized C code is sometimes the same as well optimized Python code. 
+poorly optimized as in, you didnt spend a dozen hours reading how the compiler works. 
+things that cannot be intuitive without either general or specific compiler knowledge
