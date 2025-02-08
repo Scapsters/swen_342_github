@@ -18,26 +18,10 @@ export class MyWorker {
 
     constructor() {
         const stateTarget = { value: State.New, lastValue: State.New }
-        const stateHandler = {
-            set: (target: any, _: any, value: State) => {
-                target.lastValue = target.value
-                target.value = value
-                self.postMessage({ message: 'set state', value: value })
-                return true
-            }
-        }
-        this.stateProxy = new Proxy(stateTarget, stateHandler)
+        this.stateProxy = createMessageProxy(stateTarget, 'value')
 
         const actionTarget = { value: 'new', lastValue: 'new' }
-        const actionHandler = {
-            set: (target: any, _: any, value: string) => {
-                target.lastValue = target.value
-                target.value = value
-                self.postMessage({ message: 'set action', value: value })
-                return true
-            }
-        }
-        this.actionProxy = new Proxy(actionTarget, actionHandler)
+        this.actionProxy = createMessageProxy(actionTarget, 'value')
     
         this.onMessage = this.onMessage.bind(this)
     }
@@ -56,5 +40,17 @@ export class MyWorker {
         this.stateProxy.value = state
     }
 }
+
+function createMessageProxy(target: { value: any }, name: string) {
+    const handler = {
+        set: (target: any, _: any, value: typeof target.value) => {
+            target[name] = value
+            self.postMessage({ message: `set ${name}`, value: value })
+            return true
+        }
+    }
+    return new Proxy(target, handler)
+}
+
 const worker = new MyWorker()
 self.onmessage = worker.onMessage
