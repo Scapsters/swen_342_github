@@ -5,22 +5,11 @@ import { State } from '../Enum/State.js'
 export class CounterWorker extends MyWorker {
 
     countIntervalId: number | undefined
-    actionProxy = { value: 'new', lastValue: 'new' }
 
     constructor() {
         super()
         this.onMessage = this.onMessage.bind(this)
 
-        const actionTarget = this.actionProxy
-        const actionHandler = {
-            set: (target: any, _: any, value: State) => {
-                target.lastValue = target.value
-                target.value = value
-                self.postMessage({ message: 'set action', value: value })
-                return true
-            }
-        }
-        this.actionProxy = new Proxy(actionTarget, actionHandler)
     }
 
     onMessage(event: MessageEvent) {

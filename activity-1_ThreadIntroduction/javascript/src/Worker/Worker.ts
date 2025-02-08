@@ -11,21 +11,33 @@ export enum State {
 }
 
 export class MyWorker {
-    stateHandler: { set: (target: any, property: string, value: State) => boolean }
     stateProxy: { value: State, lastValue: State }
+    actionProxy: { value: string, lastValue: string }
+
     workerId: string | undefined
 
     constructor() {
         const stateTarget = { value: State.New, lastValue: State.New }
-        this.stateHandler = {
-            set: (target, _, value: State) => {
+        const stateHandler = {
+            set: (target: any, _: any, value: State) => {
                 target.lastValue = target.value
                 target.value = value
                 self.postMessage({ message: 'set state', value: value })
                 return true
             }
         }
-        this.stateProxy = new Proxy(stateTarget, this.stateHandler)
+        this.stateProxy = new Proxy(stateTarget, stateHandler)
+
+        const actionTarget = { value: 'new', lastValue: 'new' }
+        const actionHandler = {
+            set: (target: any, _: any, value: string) => {
+                target.lastValue = target.value
+                target.value = value
+                self.postMessage({ message: 'set action', value: value })
+                return true
+            }
+        }
+        this.actionProxy = new Proxy(actionTarget, actionHandler)
     
         this.onMessage = this.onMessage.bind(this)
     }

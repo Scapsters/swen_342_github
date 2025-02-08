@@ -2,24 +2,11 @@ import { MyWorker, State } from './Worker.js';
 
 class WoolieWorker extends MyWorker {
 
-    actionProxy = { value: 'new', lastValue: 'new' }
-
     destination: string | undefined
     timeToDestination: number | undefined
 
     constructor() {
         super()
-
-        const actionTarget = this.actionProxy
-        const actionHandler = {
-            set: (target: any, _: any, value: State) => {
-                target.lastValue = target.value
-                target.value = value
-                self.postMessage({ message: 'set action', value: value })
-                return true
-            }
-        }
-        this.actionProxy = new Proxy(actionTarget, actionHandler)
     }
 
     onMessage(event: MessageEvent) {
@@ -36,13 +23,13 @@ class WoolieWorker extends MyWorker {
             this.setState(State.Running)
             this.setAction('moving')
 
-            this.startMoving()
+            this.postStartMoving()
         }
         if (data.message === 'stop moving') {
             this.setState(State.Waiting)
             this.setAction('stopped')
 
-            this.stopMoving()
+            this.postStopMoving()
         }
         if (data.message === 'start waiting') {
             this.setState(State.Waiting)
@@ -52,10 +39,10 @@ class WoolieWorker extends MyWorker {
         }
     }
 
-    startMoving() {
+    postStartMoving() {
         self.postMessage({ message: 'start moving' })
     }
-    stopMoving() {
+    postStopMoving() {
         self.postMessage({ message: 'stop moving' })
     }
     startWaiting() {
