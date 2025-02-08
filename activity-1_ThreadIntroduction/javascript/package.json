@@ -1,0 +1,24 @@
+{
+  "name": "pure",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "me",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.0.1",
+    "pure": "file:",
+    "tailwindcss": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

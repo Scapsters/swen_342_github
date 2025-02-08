@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Thread Intro</title>  
+    </head>
+    <body>
+        <div>
+            <button id="StartCounterButton">Start Counter Worker</button>
+            <button id="StopCounterButton">Stop Counter Worker</button>
+        </div>
+        <div>
+            <label for="CounterSelector">Select Counter</label>
+            <input type="number" id="CounterSelector" value="0">
+        </div>
+        <div>
+            <button id="StartCountButton">Start Count</button>
+            <button id="StopCountButton">Stop Count</button>
+            <button id="ResetCountButton">Reset Count</button>
+        </div>
+        <div>
+            <button id="StartWoolieButton">Start Woolie Worker</button>
+            <button id="StopWoolieButton">Stop Woolie Worker</button>
+        </div>
+        <div>
+            <label for="WoolieSelector">Select Woolie</label>
+            <input type="number" id="WoolieSelector" value="0">
+        </div>
+        <div>
+            <button id="CrossBridgeButton">Cross Bridge</button>
+        </div>
+        <div id="WorkerView"></div>
+
+        <script src="./dist/index.js" type="module"></script>
+    </body>
+
+    <template id="CounterTemplate">
+            <h2 class="id"></h2>
+            <h3>State: <span class="state">Not Counting</span></h3>
+            <p>Count: <span class="count"></span></p>
+    </template>
+
+    <template id="WoolieTemplate">
+            <h2><span class="id"></span> <span class="state">(Not Counting)</span></h2>
+            <p>Destination: <span class="destination"></span></p>
+            <p>Progress: <span class="progress"></span></p>
+    </template>
+</html>
