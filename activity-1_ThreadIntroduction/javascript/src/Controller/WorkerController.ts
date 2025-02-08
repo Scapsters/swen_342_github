@@ -48,7 +48,6 @@ export abstract class WorkerController
             }
         };
         this.stateProxy = new Proxy(target, stateHandler) 
-
     }
     destructor() 
     {

@@ -4,7 +4,7 @@ import { State } from '../Enum/State.js'
 
 export class CounterWorker extends MyWorker {
 
-    countIntervalId: NodeJS.Timeout | undefined
+    countIntervalId: number | undefined
     actionProxy = { value: 'new', lastValue: 'new' }
 
     constructor() {

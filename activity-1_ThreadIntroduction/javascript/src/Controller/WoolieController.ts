@@ -53,7 +53,5 @@ export class WoolieController extends WorkerController
 
     startMoving(callback: Function)     { this.worker.postMessage({ message: 'start moving' }); this.bridgeCallback = callback }
     stopMoving()                        { this.worker.postMessage({ message: 'end moving' }); this.bridgeCallback() }
-      
     crossBridge()                       { this.bridge.requestResource(this) }
 }
-

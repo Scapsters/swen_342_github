@@ -31,9 +31,7 @@ function startCounterWorker()
 {
     new CounterController().startCount()
 }
-
 function startWoolieWorker() 
 {
     new WoolieController(bridge, 'North', 10).crossBridge()
 }
-

@@ -28,4 +28,3 @@ export class WoolieView extends WorkerView
         this.displayDestination.innerHTML = "None"
     }
 }
-
