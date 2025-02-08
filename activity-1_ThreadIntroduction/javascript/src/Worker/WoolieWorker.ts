@@ -22,31 +22,15 @@ class WoolieWorker extends MyWorker {
         if (data.message === 'start moving') {
             this.setState(State.Running)
             this.setAction('moving')
-
-            this.postStartMoving()
         }
         if (data.message === 'stop moving') {
             this.setState(State.Waiting)
             this.setAction('stopped')
-
-            this.postStopMoving()
         }
         if (data.message === 'start waiting') {
             this.setState(State.Waiting)
             this.setAction('waiting')
-            
-            this.startWaiting()
         }
-    }
-
-    postStartMoving() {
-        self.postMessage({ message: 'start moving' })
-    }
-    postStopMoving() {
-        self.postMessage({ message: 'stop moving' })
-    }
-    startWaiting() {
-        self.postMessage({ message: 'start waiting' })
     }
 
     setAction(action: string) {
