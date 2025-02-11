@@ -2,13 +2,21 @@ import { Queue } from '../Data/Queue.js'
 import { WorkerController } from '../Controller/WorkerController.js'
 
 export abstract class SharedResource<T extends WorkerController> {
-    isLocked = false
-    owner: T | null = null
+    private readonly owners: T[] = []
+    private readonly capacity: number
     private readonly queue = new Queue<T>()
     
+    constructor(capacity: number) {
+        this.capacity = capacity
+    }
+
+    getIsLocked(): boolean {
+        return this.owners.length >= this.capacity
+    }
+
     requestResource(user: T): void {
         this.queue.enqueue(user)
-        if(!this.isLocked) {
+        if(!this.getIsLocked()) {
             this.startNextWorker()
         } else {
             this.holdResource(user)
@@ -17,20 +25,18 @@ export abstract class SharedResource<T extends WorkerController> {
 
     startNextWorker(): void {
         if(this.queue.isEmpty()) return
-        if(this.isLocked) return
-        this.isLocked = true
+        if(this.getIsLocked()) return
 
         const nextWorker = this.queue.dequeue()
         if(!nextWorker) return
 
-        this.owner = nextWorker
+        this.owners.push(nextWorker)
         this.giveResource(nextWorker)
     }
 
-    releaseResource(WorkerController: T): void {
-        if(this.owner === WorkerController) {
-            this.owner = null
-            this.isLocked = false
+    releaseResource(workerController: T): void {
+        if(this.owners.includes(workerController)) {
+            this.owners.splice(this.owners.indexOf(workerController), 1)
             this.startNextWorker()
         }
         else {
