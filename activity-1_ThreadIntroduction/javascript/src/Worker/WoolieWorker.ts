@@ -1,27 +1,42 @@
 import { MyWorker, State } from './Worker.js';
+import { sleep } from '../Util/Sleep.js';
 
 class WoolieWorker extends MyWorker {
 
     destination: string | undefined
     timeToDestination: number | undefined
 
-    constructor() {
-        super()
+    // Behaviors
+    async startMoving() {
+        if(this.timeToDestination === undefined) return
+        while(this.timeToDestination > 0) {
+            this.timeToDestination--
+            emitProgress()
+            await sleep(1000)
+        }
+        emitBridgeCrossed()
+        this.setState(State.Terminated)
+        this.setAction('stopped')
     }
 
+    /*
+     * Communication from the controller
+     */
     onMessage(event: MessageEvent) {
         super.onMessage(event)
-        const { data } = event
+        const data: { message: string, value?: string | State } = event.data
 
         if (data.message === 'set destination') {
-            this.destination = data.destination
+            this.destination = String(data.value)
         }
         if (data.message === 'set time to cross') {
-            this.timeToDestination = data.timeToDestination
+            this.timeToDestination = Number(data.value)
         }
         if (data.message === 'start moving') {
             this.setState(State.Running)
             this.setAction('moving')
+
+            this.startMoving()
         }
         if (data.message === 'stop moving') {
             this.setState(State.Waiting)
@@ -32,11 +47,13 @@ class WoolieWorker extends MyWorker {
             this.setAction('waiting')
         }
     }
-
-    setAction(action: string) {
-        this.actionProxy.value = action
-    }
-
 }
-const woolieWorker = new WoolieWorker();
-self.onmessage = woolieWorker.onMessage;
+
+/*
+ * Communication with the controller
+ */
+function emitBridgeCrossed() { self.postMessage({ message: 'bridge crossed', value: "n/a" }) }
+function emitProgress()      { self.postMessage({ message: 'increment progress', value: "n/a" }) }
+
+const woolieWorker = new WoolieWorker()
+self.onmessage = woolieWorker.onMessage

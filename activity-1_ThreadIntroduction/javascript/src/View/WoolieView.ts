@@ -27,4 +27,11 @@ export class WoolieView extends WorkerView
         this.displayProgress.innerHTML    = String(0)
         this.displayDestination.innerHTML = "None"
     }
+
+    incrementProgress() {
+        this.displayProgress.innerHTML = String(parseInt(this.displayProgress.innerHTML) + 1)
+    }
+    setDestination(destination: string) {
+        this.displayDestination.innerHTML = destination
+    }
 }

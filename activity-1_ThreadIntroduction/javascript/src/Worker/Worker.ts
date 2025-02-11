@@ -55,6 +55,10 @@ export class MyWorker {
     setState(state: State) {
         this.stateProxy.value = state
     }
+
+    setAction(action: string) {
+        this.actionProxy.value = action
+    }
 }
 const worker = new MyWorker()
 self.onmessage = worker.onMessage
