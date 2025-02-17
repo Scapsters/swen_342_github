@@ -9,26 +9,25 @@ export class WoolieController extends WorkerController
     static stopWorkerOnSelectedWorker() { WoolieController.Holder.get(WoolieView.getSelectedWorkerId())?.destructor() }
     static crossBridgeOnSelectedWorker() { WoolieController.Holder.get(WoolieView.getSelectedWorkerId())?.crossBridge() }
 
-    workerView: WoolieView
+    protected workerView: WoolieView
 
-    bridge: Bridge // Shared Resource
+    bridge!: Bridge // Shared Resource
 
     constructor(bridge: Bridge, destination: string, timeToCross: number) 
     {
         // Start worker and initialize basic properties
         super('WoolieWorker.js')
-        this.worker.onmessage = this.onMessage.bind(this)
         this.workerId = WoolieController.Holder.add(this)
 
         // Initialize woolie specific properties
-        this.bridge = bridge
         this.setDestination(destination)
-        this.setTimeToCross(timeToCross)
+            .setTimeToCross(timeToCross)
+            .bridge = bridge
 
         // Create the view
         this.workerView = new WoolieView(this.workerId)
-        this.workerView.appendElement()
-        this.workerView.setDestination(destination)
+            .appendElement()
+            .setDestination(destination)
     }
     destructor() {
         this.workerView.removeElement()
@@ -36,9 +35,8 @@ export class WoolieController extends WorkerController
         this.worker.terminate()
     }
 
-
     /*
-     * Behavior
+     * Controller behavior
      */
     crossBridge()     { this.bridge.requestResource(this) }
 
@@ -62,11 +60,26 @@ export class WoolieController extends WorkerController
     /*
      * Communication with the worker
      */
-    private setDestination(destination: string) { this.worker.postMessage({ message: 'set destination', value: destination }) }
-    private setTimeToCross(timeToCross: number) { this.worker.postMessage({ message: 'set time to cross', value: timeToCross }) }
+    private setDestination(destination: string) { 
+        return this.post('set destination', destination)
+    }
+    private setTimeToCross(timeToCross: number) {
+        return this.post('set time to cross', timeToCross)
+    }
 
-    startMoving()     { this.worker.postMessage({ message: 'start moving' }) }
-    stopMoving()      { this.worker.postMessage({ message: 'end moving' }) }
-    startWaiting()    { this.worker.postMessage({ message: 'start waiting' }) }
+    startMoving() { 
+        return this.post('start moving')
+    }
+    stopMoving() { 
+        return this.post('stop moving')
+    }
+    startWaiting() { 
+        return this.post('start waiting')
+    }
+
+    post(message: string, value?: any) {
+        this.worker.postMessage({ message: message, value: value })
+        return this
+    }
     
 }

@@ -11,34 +11,15 @@ export enum State {
 }
 
 export class MyWorker {
-    stateProxy: { value: State, lastValue: State }
-    actionProxy: { value: string, lastValue: string }
+    private readonly stateProxy: { value: State, lastValue: State }
+    private readonly actionProxy: { value: string, lastValue: string }
 
-    workerId: string | undefined
+    private workerId: string | undefined
 
     constructor() {
-        const stateTarget = { value: State.New, lastValue: State.New }
-        const stateHandler = {
-            set: (target: any, _: any, value: State) => {
-                target.lastValue = target.value
-                target.value = value
-                self.postMessage({ message: 'set state', value: value })
-                return true
-            }
-        }
-        this.stateProxy = new Proxy(stateTarget, stateHandler)
+        this.stateProxy = createProxy(State.New, 'set state')
+        this.actionProxy = createProxy('new', 'set action')
 
-        const actionTarget = { value: 'new', lastValue: 'new' }
-        const actionHandler = {
-            set: (target: any, _: any, value: string) => {
-                target.lastValue = target.value
-                target.value = value
-                self.postMessage({ message: 'set action', value: value })
-                return true
-            }
-        }
-        this.actionProxy = new Proxy(actionTarget, actionHandler)
-    
         this.onMessage = this.onMessage.bind(this)
     }
 
@@ -52,13 +33,48 @@ export class MyWorker {
         }
     }
 
+    /*
+     * Setters and Getters
+     */
     setState(state: State) {
         this.stateProxy.value = state
+        return this
+    }
+    getState(): State {
+        return this.stateProxy.value
+    }
+    getPreviousState(): State {
+        return this.stateProxy.lastValue
     }
 
     setAction(action: string) {
         this.actionProxy.value = action
+        return this
+    }
+    getAction(): string {
+        return this.actionProxy.value
+    }
+    getPreviousAction(): string {
+        return this.actionProxy.lastValue
+    }
+
+    getWorkerId(): string {
+        return this.workerId as string
     }
 }
+
+function createProxy<T>(initialValue: T, message: string) {
+    const target = { value: initialValue, lastValue: initialValue }
+    const handler = {
+        set: (target: any, _: any, value: T) => {
+            target.lastValue = target.value
+            target.value = value
+            self.postMessage({ message, value })
+            return true
+        }
+    }
+    return new Proxy(target, handler)
+}
+
 const worker = new MyWorker()
 self.onmessage = worker.onMessage
