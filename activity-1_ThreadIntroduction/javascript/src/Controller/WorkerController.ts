@@ -72,7 +72,6 @@ export abstract class WorkerController
     }
 
     setState(state: State) {
-        console.log(this.stateProxy)
         this.stateProxy.value = state
         return this
     }
