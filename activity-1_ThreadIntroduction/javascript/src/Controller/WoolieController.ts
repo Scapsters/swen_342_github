@@ -1,16 +1,16 @@
-import { Bridge } from "../SharedResource/Bridge.js";
 import { WorkerController } from "./WorkerController.js";
 import { WoolieView } from "../View/WoolieView.js";
 import { WorkerHolder } from "../Data/WorkerViewHolder.js";
+import { SharedResource } from "../SharedResource/SharedResource.js";
 
 export class WoolieController extends WorkerController {
 	static readonly Holder: WorkerHolder<WoolieController> = new WorkerHolder();
-	static stopWorkerOnSelectedWorker() {
+	static stopSelected() {
 		WoolieController.Holder.get(
 			WoolieView.getSelectedWorkerId()
 		)?.destructor();
 	}
-	static crossBridgeOnSelectedWorker() {
+	static crossBridge() {
 		WoolieController.Holder.get(
 			WoolieView.getSelectedWorkerId()
 		)?.crossBridge();
@@ -18,21 +18,27 @@ export class WoolieController extends WorkerController {
 
 	protected workerView: WoolieView;
 
-	bridge!: Bridge; // Shared Resource
+	protected bridge: SharedResource<WoolieController>; // Shared Resource
 
-	constructor(bridge: Bridge, destination: string, timeToCross: number) {
+	constructor(
+		bridge: SharedResource<WoolieController>,
+		destination: string,
+		timeToCross: number
+	) {
 		// Start worker and initialize basic properties
 		super("WoolieWorker.js");
 		this.workerId = WoolieController.Holder.add(this);
 
 		// Initialize woolie specific properties
-		this.setDestination(destination).setTimeToCross(timeToCross).bridge =
-			bridge;
+		this.post("set destination", destination);
+		this.post("set time to cross", timeToCross);
 
 		// Create the view
 		this.workerView = new WoolieView(this.workerId)
 			.appendElement()
 			.setDestination(destination);
+
+		this.bridge = bridge;
 	}
 	destructor() {
 		this.workerView.removeElement();
@@ -61,26 +67,6 @@ export class WoolieController extends WorkerController {
 			this.bridge.releaseResource(this);
 			this.destructor();
 		}
-	}
-
-	/*
-	 * Communication with the worker
-	 */
-	private setDestination(destination: string) {
-		return this.post("set destination", destination);
-	}
-	private setTimeToCross(timeToCross: number) {
-		return this.post("set time to cross", timeToCross);
-	}
-
-	startMoving() {
-		return this.post("start moving");
-	}
-	stopMoving() {
-		return this.post("stop moving");
-	}
-	startWaiting() {
-		return this.post("start waiting");
 	}
 
 	post(message: string, value?: any) {

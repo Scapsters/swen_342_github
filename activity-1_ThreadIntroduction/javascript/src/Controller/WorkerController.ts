@@ -14,6 +14,7 @@ export abstract class WorkerController {
 	 * Use the proxy to edit
 	 */
 	protected stateProxy: { value: State };
+    protected workerState
 
 	protected constructor(filename: string) {
 		// Init worker, add to static storage
@@ -23,17 +24,6 @@ export abstract class WorkerController {
 			new URL(`./../Worker/${filename}`, import.meta.url),
 			{ type: "module" }
 		);
-
-		// Add error event listener to handle loading errors
-		this.worker.onerror = (error) => {
-			console.error(
-				`Failed to load worker script: ../Worker/${filename}`
-			);
-			console.log(error.message);
-			throw new Error(
-				`Failed to load worker script: ../Worker/${filename}`
-			);
-		};
 
 		this.worker.onmessage = this.onMessage;
 		this.workerId = WorkerController.Holder.add(this);
