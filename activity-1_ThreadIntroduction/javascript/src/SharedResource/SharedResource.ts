@@ -1,49 +1,50 @@
-import { Queue } from '../Data/Queue.js'
-import { WorkerController } from '../Controller/WorkerController.js'
+import { Queue } from "../Data/Queue.js";
+import { WorkerController } from "../Controller/WorkerController.js";
 
 export abstract class SharedResource<T extends WorkerController> {
-    private readonly owners: T[] = []
-    private readonly capacity: number
-    private readonly queue = new Queue<T>()
-    
-    constructor(capacity: number) {
-        this.capacity = capacity
-    }
+	private readonly owners: T[] = [];
+	private readonly capacity: number;
+	private readonly queue = new Queue<T>();
 
-    getIsLocked(): boolean {
-        return this.owners.length >= this.capacity
-    }
+	constructor(capacity: number) {
+		this.capacity = capacity;
+	}
 
-    requestResource(user: T): void {
-        this.queue.enqueue(user)
-        if(!this.getIsLocked()) {
-            this.startNextWorker()
-        } else {
-            this.holdResource(user)
-        }
-    }
+	getIsLocked(): boolean {
+		return this.owners.length >= this.capacity;
+	}
 
-    startNextWorker(): void {
-        if(this.queue.isEmpty()) return
-        if(this.getIsLocked()) return
+	requestResource(user: T): void {
+		this.queue.enqueue(user);
+		if (!this.getIsLocked()) {
+			this.startNextWorker();
+		} else {
+			this.holdResource(user);
+		}
+	}
 
-        const nextWorker = this.queue.dequeue()
-        if(!nextWorker) return
+	startNextWorker(): void {
+		if (this.queue.isEmpty()) return;
+		if (this.getIsLocked()) return;
 
-        this.owners.push(nextWorker)
-        this.giveResource(nextWorker)
-    }
+		const nextWorker = this.queue.dequeue();
+		if (!nextWorker) return;
 
-    releaseResource(workerController: T): void {
-        if(this.owners.includes(workerController)) {
-            this.owners.splice(this.owners.indexOf(workerController), 1)
-            this.startNextWorker()
-        }
-        else {
-            throw new Error("Worker tried releasing shared resource it didn't own")
-        }
-    }
+		this.owners.push(nextWorker);
+		this.giveResource(nextWorker);
+	}
 
-    abstract giveResource(worker: T): void
-    abstract holdResource(worker: T): void
+	releaseResource(workerController: T): void {
+		if (this.owners.includes(workerController)) {
+			this.owners.splice(this.owners.indexOf(workerController), 1);
+			this.startNextWorker();
+		} else {
+			throw new Error(
+				"Worker tried releasing shared resource it didn't own"
+			);
+		}
+	}
+
+	abstract giveResource(worker: T): void;
+	abstract holdResource(worker: T): void;
 }
