@@ -5,10 +5,10 @@ export class WoolieView extends WorkerView
 {
     static readonly workerViewSelector = nullCheck(document.getElementById('WoolieSelector'), 'WoolieSelector') as HTMLInputElement
 
-    displayDestination!: HTMLElement
-    displayProgress!: HTMLElement
+    protected displayDestination!: HTMLElement
+    protected displayProgress!: HTMLElement
 
-    templateId = 'WoolieTemplate'
+    protected templateId = 'WoolieTemplate'
 
     constructor(workerId: number) 
     {
@@ -26,5 +26,15 @@ export class WoolieView extends WorkerView
         this.displayId.innerHTML          = String(`Woolie ${this.workerId}`)
         this.displayProgress.innerHTML    = String(0)
         this.displayDestination.innerHTML = "None"
+        return this
+    }
+
+    incrementProgress() {
+        this.displayProgress.innerHTML = String(parseInt(this.displayProgress.innerHTML) + 1)
+        return this
+    }
+    setDestination(destination: string) {
+        this.displayDestination.innerHTML = destination
+        return this
     }
 }

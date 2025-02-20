@@ -1,3 +1,4 @@
+import { State } from "../Enum/State.js"
 import { nullCheck } from "../Util/Debug.js"
 
 export class WorkerView
@@ -9,19 +10,19 @@ export class WorkerView
         return parseInt(this.workerViewSelector.value)
     }
 
-    workerId: number
-    templateId: string
+    protected readonly workerId: number
+    protected readonly templateId: string
 
     /**
      * Id that is displayed. is the integer of the workerId
      */
-    elementId: string
-    wrapper!: HTMLElement
+    protected elementId: string
+    protected wrapper!: HTMLElement
 
-    element!: HTMLElement
-    displayId!: HTMLElement
-    displayCount!: HTMLElement
-    displayState!: HTMLElement
+    protected element!: HTMLElement
+    protected displayId!: HTMLElement
+    protected displayCount!: HTMLElement
+    protected displayState!: HTMLElement
 
     protected constructor(workerId: number, templateId: string) 
     {
@@ -32,7 +33,7 @@ export class WorkerView
         this.createElement()
     }
 
-    createElement() 
+    private createElement() 
     {
         const threadTemplate = nullCheck(document.getElementById(this.templateId), `${this.templateId}`) as HTMLTemplateElement
         const clone = nullCheck(threadTemplate.content.cloneNode(true), 'clone')
@@ -63,5 +64,16 @@ export class WorkerView
             this.wrapper, 'node')
             .parentNode, 'parentNode')
             .removeChild(this.wrapper)
+        return this
+    }
+
+    protected setElementText(element: HTMLElement, text: string) 
+    {
+        element.innerHTML = text
+        return this
+    }
+
+    setState(state: State) {
+        return this.setElementText(this.displayState, State[state])
     }
 }

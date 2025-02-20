@@ -4,7 +4,7 @@ import { State } from '../Enum/State.js'
 
 export class CounterWorker extends MyWorker {
 
-    countIntervalId: number | undefined
+    countIntervalId: NodeJS.Timeout | undefined
 
     constructor() {
         super()
@@ -39,24 +39,20 @@ export class CounterWorker extends MyWorker {
 
             self.postMessage({ message: 'set count', value: 0 })
             clearInterval(this.countIntervalId)
-            if (this.actionProxy.lastValue === 'counting') {
+            if (this.getPreviousAction() === 'counting') {
                 this.onMessage(new MessageEvent('message', { data: { message: 'start count' } }))
             }
-            if (this.actionProxy.lastValue === 'stopped') {
+            if (this.getPreviousAction() === 'stopped') {
                 this.onMessage(new MessageEvent('message', { data: { message: 'end count' } }))
             }
         }
     }
 
     startCount() {
-        this.actionProxy.value = 'counting';
+        this.setAction('counting')
         this.countIntervalId = setInterval(() => {
             self.postMessage({ message: 'count', value: "n/a" })
         }, 1000)
-    }
-
-    setAction(action: string) {
-        this.actionProxy.value = action
     }
 }
 

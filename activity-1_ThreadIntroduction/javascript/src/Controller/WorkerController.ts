@@ -1,4 +1,3 @@
-import { nullCheck } from "../Util/Debug.js"
 import { State } from "../Enum/State.js"
 import { WorkerView } from "../View/WorkerView.js"
 import { WorkerHolder } from "../Data/WorkerViewHolder.js"
@@ -7,15 +6,15 @@ export abstract class WorkerController
 {
     static readonly Holder: WorkerHolder<WorkerController> = new WorkerHolder()
 
-    abstract workerView: WorkerView
+    protected abstract workerView: WorkerView
     
-    worker: Worker
-    workerId: number
+    protected worker: Worker
+    protected workerId: number
 
     /**
-     * ### Use the proxy to edit
+     * Use the proxy to edit
      */
-    stateProxy: { value: State }
+    protected stateProxy: { value: State }
 
     protected constructor(filename: string)
     {
@@ -31,7 +30,7 @@ export abstract class WorkerController
             throw new Error(`Failed to load worker script: ../Worker/${filename}`);
         };
 
-        this.worker.onmessage = this.onMessage.bind(this)
+        this.worker.onmessage = this.onMessage
         this.workerId = WorkerController.Holder.add(this)
 
         // Initiate isCounting listener
@@ -43,7 +42,7 @@ export abstract class WorkerController
             set: (target: { value: State }, _: string, value: State) => {
                 console.log("state changed", value)
                 target.value = value
-                nullCheck(this.workerView.displayState, 'displayState').innerHTML = `(${State[value]})`
+                this.workerView.setState(value)
                 return true
             }
         };
@@ -68,7 +67,12 @@ export abstract class WorkerController
             if (typeof data.value === 'string') {
                 throw new Error("value is string, should be state")
             }
-            this.stateProxy.value = data.value
+            this.setState(data.value)
         }
+    }
+
+    setState(state: State) {
+        this.stateProxy.value = state
+        return this
     }
 }

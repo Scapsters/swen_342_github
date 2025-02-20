@@ -3,7 +3,7 @@ import { Bridge } from './SharedResource/Bridge.js'
 import { CounterController } from './Controller/CounterController.js'
 import { WoolieController } from './Controller/WoolieController.js'
 
-const bridge = new Bridge()
+const bridge = new Bridge(3)
 
 const clickEvents: [string, () => void][] = 
 [
@@ -29,9 +29,11 @@ function addClickEvent(id: string, func: () => void)
 
 function startCounterWorker() 
 {
-    new CounterController().startCount()
+    new CounterController()
+        .startCount()
 }
 function startWoolieWorker() 
 {
-    new WoolieController(bridge, 'North', 10).crossBridge()
+    new WoolieController(bridge, 'North', 10)
+        .crossBridge()
 }
