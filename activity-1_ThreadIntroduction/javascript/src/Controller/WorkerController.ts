@@ -14,7 +14,6 @@ export abstract class WorkerController {
 	 * Use the proxy to edit
 	 */
 	protected stateProxy: { value: State };
-    protected workerState
 
 	protected constructor(filename: string) {
 		// Init worker, add to static storage
