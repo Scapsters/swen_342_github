@@ -4,4 +4,4 @@ class CounterWorker extends Thread {
 
 }
 
-initThread(self)
+initThread()

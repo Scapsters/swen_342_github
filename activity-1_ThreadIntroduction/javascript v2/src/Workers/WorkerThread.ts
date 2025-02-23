@@ -1,4 +1,5 @@
 type Dict = { [key: string]: any };
+type Payload = { action: string, data: Dict };
 
 export class Thread {
 	static readonly data: Dict = {};
@@ -27,14 +28,15 @@ export class Thread {
 	};
 }
 
-export function initThread(self: Window & typeof globalThis) {
+export function initThread() {
 	self.onmessage = (event: MessageEvent) => {
-		const data = event.data;
-	
-		if(data.message === "run") Thread.run(data)
+		const payload: Payload = event.data;
+
+		console.log(payload)
+		if(payload.action === "start") Thread.run(payload.data)
 	};
 }
 
-initThread(self)
+initThread()
 
 export default Thread

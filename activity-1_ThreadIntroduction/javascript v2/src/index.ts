@@ -1,7 +1,12 @@
-import Thread from "./ThreadController.js";
+import Log from "./Log.js";
+import Thread from "./Thread.js";
 
 function start() {
-    const thread = new Thread('Worker', {})
+    const code = (document.getElementById("code") as HTMLTextAreaElement).value
+
+    const runCode = new Function("Thread", "Log", code);
+
+    runCode(Thread, Log);
 }
 
 document.getElementById("start")!.addEventListener("click", start);
