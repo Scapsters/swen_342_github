@@ -1,5 +1,58 @@
 @import "tailwindcss";
 
 * {
-	font-family: 'Helvetica Neue', sans-serif;
+	font-family: "Helvetica Neue", sans-serif;
+}
+
+body {
+	overflow: hidden
+}
+
+/* Define the animatable CSS variables */
+@property --x {
+	syntax: "<percentage>";
+	inherits: false;
+	initial-value: 0%;
+}
+
+@property --y {
+	syntax: "<percentage>";
+	inherits: false;
+	initial-value: 0%;
+}
+
+:root {
+	--x: 0%;
+	--y: 0%;
+}
+
+@keyframes gradient-slide {
+	0% {
+		--x: -100%;
+		--y: -300%;
+	}
+	100% {
+		--x: 100%;
+		--y: -100%;
+	}
+}
+
+.gradient::before {
+	position: absolute;
+	content: "";
+	width: 600%;
+	height: 600%;
+	left: var(--x);
+	bottom: var(--y);
+	transform: rotate(-45deg) translateY(-27%) translateX(-25%);
+	z-index: -1;
+	background: linear-gradient(
+		90deg,
+		rgb(92, 255, 187),
+		#ffd753,
+		rgb(92, 255, 187),
+		#ffc504,
+		rgb(92, 255, 187)
+	);
+	animation: gradient-slide 18s infinite alternate ease;
 }
