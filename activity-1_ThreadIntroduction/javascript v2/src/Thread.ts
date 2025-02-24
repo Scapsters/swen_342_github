@@ -9,6 +9,19 @@ export class Thread {
 		this.worker.postMessage({ action: "start", data: this.data });
 		return this;
 	}
+	join() {
+		return new Promise<void>(resolve => {
+			this.worker.onmessage = (event) => {
+				// Intercept any "ends"
+				if(event.data.message === "end") {
+					console.log('hi')
+					resolve()
+				}
+				// Otherwise provide to default onmessage
+				this.onmessage(event)
+			}
+		})
+	}
 
 	/**
 	 * Worker must support "run" message

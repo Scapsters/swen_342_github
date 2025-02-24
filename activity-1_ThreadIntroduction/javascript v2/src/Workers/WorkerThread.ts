@@ -9,6 +9,7 @@ export class Thread {
 	static run(data: Dict) {
 		Thread.initData(data);
 		self.postMessage({ message: "print", value: "Hello from Worker!" });
+		self.postMessage({ message: "end" });
 	};
 
 	/**
