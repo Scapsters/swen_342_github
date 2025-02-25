@@ -21,33 +21,28 @@ export class Thread {
 	}
 
 	static async synchronized(callback: () => Promise<void>): Promise<void> {
-		// A promise containing an async function is usually bad,
-		// But we wish to emulate how java synchronized blocks work.
-		return new Promise(async (resolve) => {
-			// Request and wait for the key
-			Thread.request("key1");
-			await new Promise<void>((resolve) => {
-				self.onmessage = (event) => {
-					const [action, value] = [
-						event.data.action,
-						event.data.value,
-					];
+		// Request and wait for the key
+		Thread.request("key1");
+		await new Promise<void>((resolve) => {
+			self.onmessage = (event) => {
+				const [action, value] = [
+					event.data.action,
+					event.data.value,
+				];
 
-					// Catch any messages that give us the key
-					if (action === "give" && value === "key1") {
-						resolve();
-					}
+				// Catch any messages that give us the key
+				if (action === "give" && value === "key1") {
+					resolve();
+				}
 
-					// Fall through to default
-					//onmessage(event);
-				};
-			});
-
-			// Execute, release, and resolve
-			await callback();
-			Thread.release("key1");
-			resolve();
+				// Fall through to default
+				//onmessage(event);
+			};
 		});
+
+		// Execute, release, and resolve
+		await callback();
+		Thread.release("key1");
 	}
 
 	/**
