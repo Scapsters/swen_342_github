@@ -4,39 +4,33 @@ type Payload = { action: string; data: Dict };
 export class Thread {
 	static readonly data: Dict = {};
 
-	// These can be static since there should only ever be one instance of them.
-	// These classes exist so that inheritance can be used
+	/**
+	 * The main function that will be run by the worker.
+	 * Should call `initData` and `end`
+	 */
 	static async run(data: Dict) {
 		Thread.initData(data);
 		Thread.print("Hello from Worker!");
-
-		await Thread.synchronized(async () => {
-			await new Promise((resolve) => {
-				Thread.print("Waiting for 5 seconds...");
-				setTimeout(resolve, 1000);
-			});
-			Thread.print("done");
-		});
 		Thread.end();
 	}
 
+	/**
+	 * Returns a promise of the execution of an arbitrary function.
+	 * Execution can only happen if the key is not in use by any other worker.
+	 * Otherwise, it will be queued for execution
+	 */
 	static async synchronized(callback: () => Promise<void>): Promise<void> {
 		// Request and wait for the key
 		Thread.request("key1");
-		await new Promise<void>((resolve) => {
-			self.onmessage = (event) => {
-				const [action, value] = [
-					event.data.action,
-					event.data.value,
-				];
+		await new Promise<void>(resolve => {
+			self.onmessage = event => {
+				const [action, value] = [event.data.action, event.data.value];
 
 				// Catch any messages that give us the key
-				if (action === "give" && value === "key1") {
-					resolve();
-				}
+				if (action === "give" && value === "key1") resolve();
 
 				// Fall through to default
-				//onmessage(event);
+				onmessage(event);
 			};
 		});
 
@@ -58,8 +52,8 @@ export class Thread {
 			Thread.setData(property, value);
 	};
 
-	/**
-	 * Shorthand for printing. Supports chaining.
+	/*
+	 * Helper functions
 	 */
 	protected static print(message: string): Thread {
 		self.postMessage({ action: "print", value: message });
@@ -81,7 +75,6 @@ export class Thread {
 
 const onmessage = (event: MessageEvent) => {
 	const payload: Payload = event.data;
-
 	if (payload.action === "start") Thread.run(payload.data);
 };
 

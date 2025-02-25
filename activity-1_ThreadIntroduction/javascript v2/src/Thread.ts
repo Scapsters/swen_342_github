@@ -19,6 +19,11 @@ export class Thread {
 		this.worker.postMessage({ action: "start", data: this.data });
 		return this;
 	}
+
+	/**
+	 * Returns a promise that resolves when the thread ends.
+	 * This must be `await`ed in order to properly pause the main thread
+	 */
 	join() {
 		return new Promise<void>((resolve) => {
 			this.worker.onmessage = (event: MessageEvent) => {
@@ -42,16 +47,16 @@ export class Thread {
 			import.meta.url
 		);
 
+		// Initiaize worker and worker properties
 		this.worker = new Worker(workerPath.href, {
 			type: "module",
 		});
-
 		this.worker.onerror = (event) => console.error("Worker error", event);
 		this.worker.onmessage = this.onmessage.bind(this);
 
-		this.data = data;
+		this.data = data; // This will be passed to the worker upon start
 
-		this.log = new Log(name);
+		this.log = new Log(name); // Create a log to append the threads name to all messages
 	}
 
 	private readonly worker: Worker;
@@ -64,31 +69,40 @@ export class Thread {
 			case "print":
 				this.log.log(value);
 				break;
+
+			// If the key is available, queue the worker and give it. Otherwise, just queue
 			case "request":
 				this.log.log(`Requesting ${value}`);
 				this.addKey(value);
-				// If the key is in use, wait for it to be released
 				if (!Thread.keys[value].isEmpty()) {
 					Thread.keys[value].enqueue(this.worker);
-					return;
+				} else {
+					Thread.keys[value].enqueue(this.worker);
+					this.give(value);
 				}
-				Thread.keys[value].enqueue(this.worker);
-				this.give(value);
 				break;
+
+			// Remove the worker at the front and give it to the next
 			case "release":
 				this.log.log(`Releasing ${value}`);
 				this.addKey(value);
-				Thread.keys[value].dequeue() // Remove the old worker from the queue
+				Thread.keys[value].dequeue()
 				this.giveTo(value, Thread.keys[value].peek());
 				break;
+
+			// Add worker to the wait list
 			case "wait":
 				this.addWait(value);
 				Thread.waits[value].enqueue(this.worker);
 				break;
+
+			// Notify the first worker in the wait list
 			case "notify":
 				this.addWait(value);
 				this.notifyTo(value, Thread.waits[value].dequeue());
 				break;
+
+			// Notify all workers in the wait list
 			case "notifyAll": {
 				const queue = Thread.waits[value];
 				while (!queue.isEmpty()) this.notifyTo(value, queue.dequeue());
@@ -99,7 +113,7 @@ export class Thread {
 
 	/**
 	 * Adds the key to keys if not present.
-	 * Return is whether or not the key was added.
+	 * Returns whether the key was added
 	 */
 	addKey(key: string): boolean {
 		if (!Thread.keys[key]) {
@@ -111,7 +125,7 @@ export class Thread {
 
 	/**
 	 * Adds the wait to waits if not present.
-	 * Return is whether or not the wait was added.
+	 * Returns whether the wait was added
 	 */
 	addWait(wait: string): boolean {
 		if (!Thread.waits[wait]) {
