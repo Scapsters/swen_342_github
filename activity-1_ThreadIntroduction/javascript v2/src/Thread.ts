@@ -3,12 +3,13 @@ import Queue from "./Queue.js";
 
 type Dict = { [key: string]: any };
 
-type Key = { key: string; queue: Queue };
-type KeyDict = { [key: string]: Key };
+type KeyDict = { [key: string]: Queue };
 
 export class Thread {
 	// All Threads share the same set of keys
 	private static keys: KeyDict = {};
+	// All Threads share the same set of waits
+	private static waits: KeyDict = {};
 
 	private readonly data: Dict = {};
 
@@ -59,42 +60,86 @@ export class Thread {
 		const data = event.data;
 		const [action, value] = [data.action, data.value];
 
-		if (action === "print") {
-			this.log.log(value);
-		}
-		if (action === "request") {
-			this.log.log("Requesting " + value);
-
-			// If the key hasn't been seen before, add an entry
-			if (!Thread.keys[value]) {
-				Thread.keys[value] = {
-					key: value,
-					queue: new Queue(),
-				};
+		switch (action) {
+			case "print":
+				this.log.log(value);
+				break;
+			case "request":
+				this.log.log(`Requesting ${value}`);
+				this.addKey(value);
+				// If the key is in use, wait for it to be released
+				if (!Thread.keys[value].isEmpty()) {
+					Thread.keys[value].enqueue(this.worker);
+					return;
+				}
+				Thread.keys[value].enqueue(this.worker);
+				this.give(value);
+				break;
+			case "release":
+				this.log.log(`Releasing ${value}`);
+				this.addKey(value);
+				Thread.keys[value].dequeue() // Remove the old worker from the queue
+				this.giveTo(value, Thread.keys[value].peek());
+				break;
+			case "wait":
+				this.addWait(value);
+				Thread.waits[value].enqueue(this.worker);
+				break;
+			case "notify":
+				this.addWait(value);
+				this.notifyTo(value, Thread.waits[value].dequeue());
+				break;
+			case "notifyAll": {
+				const queue = Thread.waits[value];
+				while (!queue.isEmpty()) this.notifyTo(value, queue.dequeue());
+				break;
 			}
-
-			// If the key is in use, wait for it to be released
-			if (!Thread.keys[value].queue.isEmpty()) {
-				Thread.keys[value].queue.enqueue(this.worker);
-				return;
-			}
-
-			// Put the worker in the front of the line
-			Thread.keys[value].queue.enqueue(this.worker);
-			// Give the key
-			this.worker.postMessage({ action: "give", value: value });
 		}
-		if (action === "release") {
-			this.log.log("Releasing " + value);
+	}
 
-			// Remove the worker from the queue so the next can have it
-			Thread.keys[value].queue.dequeue();
-
-			// Give it to the next worker (If there is one)
-			Thread.keys[value].queue
-				.peek()
-				?.postMessage({ action: "give", value: value });
+	/**
+	 * Adds the key to keys if not present.
+	 * Return is whether or not the key was added.
+	 */
+	addKey(key: string): boolean {
+		if (!Thread.keys[key]) {
+			Thread.keys[key] = new Queue();
+			return true;
 		}
+		return false;
+	}
+
+	/**
+	 * Adds the wait to waits if not present.
+	 * Return is whether or not the wait was added.
+	 */
+	addWait(wait: string): boolean {
+		if (!Thread.waits[wait]) {
+			Thread.waits[wait] = new Queue();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Gives the worker the specified key
+	 */
+	give(key: string) {
+		this.worker.postMessage({ action: "give", value: key });
+	}
+
+	/**
+	 * Gives the specified worker the specified key
+	 */
+	giveTo(key: string, worker: Worker | undefined) {
+		worker?.postMessage({ action: "give", value: key });
+	}
+
+	/**
+	 * Notified the specified worker about the specified key
+	 */
+	notifyTo(wait: string, worker: Worker | undefined) {
+		worker?.postMessage({ action: "notify", value: wait });
 	}
 }
 

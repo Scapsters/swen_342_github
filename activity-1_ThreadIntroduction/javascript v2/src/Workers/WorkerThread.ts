@@ -13,7 +13,7 @@ export class Thread {
 		await Thread.synchronized(async () => {
 			await new Promise((resolve) => {
 				Thread.print("Waiting for 5 seconds...");
-				setTimeout(resolve, 5000);
+				setTimeout(resolve, 1000);
 			});
 			Thread.print("done");
 		});
@@ -34,10 +34,12 @@ export class Thread {
 					];
 
 					// Catch any messages that give us the key
-					if (action === "give" && value === "key1") resolve();
+					if (action === "give" && value === "key1") {
+						resolve();
+					}
 
 					// Fall through to default
-					onmessage(event);
+					//onmessage(event);
 				};
 			});
 
