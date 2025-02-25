@@ -1,0 +1,24 @@
+A "Thread" is a stack being executed on a single processor. It's a list of instructions and nothing more.
+
+Javascript only has one thread. A single javascript file will never use more than one CPU.
+
+Javascript has Promises. They are the promise of a value, and can be waited on, 
+can have callbacks attached to their resolution, or passed around arbitrarily.
+
+Javascript also has Web-Workers. The constructors signature is essentially `new Worker(filename: string)`.
+This creates a new javascript program running in an entirely different chunk of memory.
+Workers have built in ways to communicate with the main thread. The implementation of communication is unknown,
+but is probably an internal server/client communication.
+
+Through the usage of these two conceps, Javascript can have threads.
+My goal is to implement as many features from Java.Thread as possible.
+
+
+The basic principle is that threads can communicate with many types of values, but strings are the safest.
+For example, many functions cannot be passed since they contain closures, which would be a violation of memory.
+Luckily strings can represent basically anything. We can tell workers to start, wait, etc. and threads can wait, notify, end, etc.
+
+It's not hard to see how through the usage of async programming and through worker 
+communication we can create a reasonable implementation of Java's Threads.
+
+An additional goal is to make it as similar as possible to using the same features in Java.
