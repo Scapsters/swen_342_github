@@ -7,21 +7,58 @@
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
-			rel="stylesheet"
-		/>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
 	</head>
 	<body class="text-slate-800">
-		<h1
-			class="gradient p-8 text-white text-4xl font-bold text-center w-1/1"
-		>
+		<h1 class="p-8 text-4xl font-bold text-center gradient text-white/85 w-1/1">
 			Threads in
-			<span class="underline text-sky-600 underline-offset-9"
-				>Typescript</span
-			>
+			<span class="underline text-sky-600/85 underline-offset-9">Typescript</span>
 		</h1>
-		<div class="z-1 bg-zinc-50 pt-6 h-screen flex flex-col items-center">
+		<div class="flex flex-col items-center h-screen pt-6 z-1 bg-zinc-50">
+			<div class="m-4 border-l-2 w-9/10 -border-slate-400 has-checked:border-l-6">
+				<input type="checkbox" id="toggle" class="hidden peer"/>
+				<label for="toggle">
+					fe
+				</label>
+				<p class="ml-2 font-bold select-none">Design Overview</p>
+					<div class="ml-2 font-bold select-none peer-checked:rotate-y-60">></div>
+				<div class="hidden p-2 ml-2 peer-checked:block">
+					<p>
+						A "Thread" is a stack being executed on a single processor. It's a list of instructions and
+						nothing more.
+					</p>
+					<br />
+					<p>Javascript only has one thread. A single javascript file will never use more than one CPU.</p>
+					<br />
+					<p>
+						Javascript has Promises. They are the promise of a value, and can be waited on, can have
+						callbacks attached to their resolution, or passed around arbitrarily.
+					</p>
+					<p>
+						Javascript also has Web-Workers. The constructor's signature is essentially
+						<code>new Worker(filename: string)</code>. This creates a new javascript program running in an
+						entirely different chunk of memory. Workers have built-in ways to communicate with the main
+						thread. The implementation of communication is unknown, but is probably an internal
+						server/client communication.
+					</p>
+					<br />
+					<p>
+						Through the usage of these two concepts, Javascript can have threads. My goal is to implement as
+						many features from <code>Java.Thread</code> as possible.
+					</p>
+					<p>
+						The basic principle is that threads can communicate with many types of values, but strings are
+						the safest. For example, many functions cannot be passed since they contain closures, which
+						would be a violation of memory. Luckily, strings can represent basically anything. We can tell
+						workers to start, wait, etc., and threads can wait, notify, end, etc.
+					</p>
+					<p>
+						It's not hard to see how, through the usage of async programming and worker communication, we
+						can create a reasonable implementation of Java's Threads.
+					</p>
+					<p>An additional goal is to make it as similar as possible to using the same features in Java.</p>
+				</div>
+			</div>
 			<div class="flex flex-col items-stretch w-9/10">
 				<textarea
 					id="code"
@@ -34,13 +71,13 @@ Log.log('Hello World!')
 				>
 				<button
 					id="start"
-					class="p-1 m-1 duration-150 bg-slate-100 border-4 rounded-xl w-15 border-slate-500 hover:border-teal-500 hover:bg-slate-200 active:bg-white"
+					class="p-1 m-1 duration-150 border-4 bg-slate-100 rounded-xl w-15 border-slate-500 hover:border-teal-500 hover:bg-slate-200 active:bg-white"
 				>
 					Run
 				</button>
 				<div
 					id="output"
-					class="p-3 overflow-auto text-slate-200 bg-gray-900 rounded-lg h-80 border-t-slate-600 border-t-36"
+					class="p-3 overflow-auto bg-gray-900 rounded-lg text-slate-200 h-80 border-t-slate-600 border-t-36"
 				>
 					<p class="mb-3 -mt-10 text-slate-200">Console</p>
 				</div>
