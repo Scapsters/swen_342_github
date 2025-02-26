@@ -1,12 +1,10 @@
-type Dict = { [key: string]: any };
-type Payload = { action: string; data: Dict };
-
 export class Thread {
 	static readonly data: Dict = {};
 
 	/**
 	 * The main function that will be run by the worker.
 	 * Should call `initData` and `end`
+	 * @param data - The data passed to the worker from the main thread
 	 */
 	static async run(data: Dict) {
 		Thread.initData(data);
@@ -21,6 +19,8 @@ export class Thread {
 	 * Returns a promise of the execution of an arbitrary function.
 	 * Execution can only happen if the key is not in use by any other worker.
 	 * Otherwise, it will be queued for execution
+	 * @param callback - The function to be executed
+	 * @returns Promise<void> A promise that resolves when the function is executed
 	 */
 	static async synchronized(callback: () => Promise<void>): Promise<void> {
 		// Request and wait for the key
@@ -44,12 +44,18 @@ export class Thread {
 
 	/**
 	 * Acts as a proxy, allowing the main thread to keep track of all state changes
+	 * @param property - The property to be set
+	 * @param value - The value to be set
 	 */
 	static setData(property: string, value: any) {
 		Thread.data[property] = value;
 		Thread.print(`Set ${property} to ${value}`);
 	}
 
+	/**
+	 * Initializes the data in the worker
+	 * @param data - The data to be set
+	 */
 	private static readonly initData = (data: Dict) => {
 		for (const [property, value] of Object.entries(data))
 			Thread.setData(property, value);
@@ -76,11 +82,18 @@ export class Thread {
 	}
 }
 
+/**
+ * Default message handler. Can be decorated by other methods.
+ * @param event - Message from the main thread
+ */
 const onmessage = (event: MessageEvent) => {
 	const payload: Payload = event.data;
 	if (payload.action === "start") Thread.run(payload.data);
 };
 
+/**
+ * Initializes the worker. Needs to be called once per worker. Importing WorkerThread will do.
+ */
 export function initThread() {
 	self.onmessage = onmessage;
 }

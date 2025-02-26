@@ -1,10 +1,6 @@
 import Log from "./Log.js";
 import Queue from "./Queue.js";
 
-type Dict = { [key: string]: any };
-
-type KeyDict = { [key: string]: Queue };
-
 export class Thread {
 	// All Threads share the same set of keys
 	private static keys: KeyDict = {};
@@ -15,14 +11,18 @@ export class Thread {
 
 	private readonly log: Log;
 
+	/**
+	 * Send the start message to a worker. This should only be called once per Thread.
+	 * @returns Thread
+	 */
 	start() {
 		this.worker.postMessage({ action: "start", data: this.data });
 		return this;
 	}
 
 	/**
-	 * Returns a promise that resolves when the thread ends.
-	 * This must be `await`ed in order to properly pause the main thread
+	 * This must be `await`ed in order to pause the main thread.
+	 * @returns Promise<void> A promise that resolves when the thread ends
 	 */
 	join() {
 		return new Promise<void>((resolve) => {
@@ -38,7 +38,9 @@ export class Thread {
 	}
 
 	/**
-	 * Worker must support "run" message
+	 * @param worker_class_name - Filename of the worker
+	 * @param data - Data to be passed to the worker
+	 * @param name - For logging purposes
 	 */
 	constructor(worker_class_name: string, data: Dict, name: string) {
 		// Use a URL with import.meta.url for browser optimization
@@ -61,6 +63,10 @@ export class Thread {
 
 	private readonly worker: Worker;
 
+	/**
+	 * Handles messages from the worker. Can be decorated by other methods.
+	 * @param event - Message from worker
+	 */
 	private onmessage(event: MessageEvent) {
 		const data = event.data;
 		const [action, value] = [data.action, data.value];
@@ -113,9 +119,10 @@ export class Thread {
 
 	/**
 	 * Adds the key to keys if not present.
-	 * Returns whether the key was added
+	 * @param key Name of key
+	 * @returns Whether the key was added
 	 */
-	addKey(key: string): boolean {
+	private addKey(key: string): boolean {
 		if (!Thread.keys[key]) {
 			Thread.keys[key] = new Queue();
 			return true;
@@ -125,9 +132,10 @@ export class Thread {
 
 	/**
 	 * Adds the wait to waits if not present.
-	 * Returns whether the wait was added
+	 * @param wait Name of wait
+	 * @returns Wether the wait was added
 	 */
-	addWait(wait: string): boolean {
+	private addWait(wait: string): boolean {
 		if (!Thread.waits[wait]) {
 			Thread.waits[wait] = new Queue();
 			return true;
@@ -137,22 +145,27 @@ export class Thread {
 
 	/**
 	 * Gives the worker the specified key
+	 * @param key Name of key
 	 */
-	give(key: string) {
+	private give(key: string) {
 		this.worker.postMessage({ action: "give", value: key });
 	}
 
 	/**
 	 * Gives the specified worker the specified key
+	 * @param key Name of key
+	 * @param worker Worker to give the key to
 	 */
-	giveTo(key: string, worker: Worker | undefined) {
+	private giveTo(key: string, worker: Worker | undefined) {
 		worker?.postMessage({ action: "give", value: key });
 	}
 
 	/**
-	 * Notified the specified worker about the specified key
+	 * Notify a worker of a wait
+	 * @param wait Name of wait
+	 * @param worker Worker to notify
 	 */
-	notifyTo(wait: string, worker: Worker | undefined) {
+	private notifyTo(wait: string, worker: Worker | undefined) {
 		worker?.postMessage({ action: "notify", value: wait });
 	}
 }

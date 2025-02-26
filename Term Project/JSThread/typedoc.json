@@ -1,4 +1,4 @@
 {
     "excludeReferences": true,
-    "excludePrivate": true,
+    "excludePrivate": false,
 }
