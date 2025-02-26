@@ -10,8 +10,11 @@ export class Thread {
 	 */
 	static async run(data: Dict) {
 		Thread.initData(data);
-		Thread.print("Hello from Worker!");
-		Thread.end();
+		await Thread.synchronized(async () => {
+			Thread.print("Acquired Key")
+			await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
+		})
+		Thread.end()
 	}
 
 	/**

@@ -49,9 +49,9 @@ body {
 	background: linear-gradient(
 		90deg,
 		rgb(92, 255, 187),
-		#ffd753,
+		#e9b200,
 		rgb(92, 255, 187),
-		#ffc504,
+		#e9b200,
 		rgb(92, 255, 187)
 	);
 	animation: gradient-slide 18s infinite alternate ease;
