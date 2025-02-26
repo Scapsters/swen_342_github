@@ -8,21 +8,21 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
 	</head>
+
 	<body class="text-slate-800">
 		<h1 class="p-8 text-4xl font-bold text-center gradient text-white/85 w-1/1">
 			Threads in
 			<span class="underline text-sky-600/85 underline-offset-9">Typescript</span>
 		</h1>
 		<div class="flex flex-col items-center h-screen pt-6 z-1 bg-zinc-50">
-			<div class="m-4 border-l-2 w-9/10 -border-slate-400 has-checked:border-l-6">
-				<input type="checkbox" id="toggle" class="hidden peer"/>
-				<label for="toggle">
-					fe
-				</label>
-				<p class="ml-2 font-bold select-none">Design Overview</p>
-					<div class="ml-2 font-bold select-none peer-checked:rotate-y-60">></div>
-				<div class="hidden p-2 ml-2 peer-checked:block">
+			<div
+				class="m-4 duration-300 border-l-2 max-h-7 w-9/10 -border-slate-400 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1 duration:300"
+			>
+				<input type="checkbox" id="overview" class="hidden peer" />
+				<label for="overview" class="ml-2 font-bold select-none"> Design Overview </label>
+				<div class="h-0 ml-2 overflow-hidden duration-300 l-2 peer-checked:max-h-auto peer-checked:h-1/1">
 					<p>
 						A "Thread" is a stack being executed on a single processor. It's a list of instructions and
 						nothing more.
@@ -57,6 +57,76 @@
 						can create a reasonable implementation of Java's Threads.
 					</p>
 					<p>An additional goal is to make it as similar as possible to using the same features in Java.</p>
+				</div>
+			</div>
+			<div
+				class="m-4 duration-300 border-l-2 max-h-7 w-9/10 -border-slate-400 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1 duration:300"
+			>
+				<input type="checkbox" id="documentation" class="hidden peer" />
+				<label for="documentation" class="ml-2 font-bold select-none"> Documentation </label>
+				<div class="h-0 ml-2 overflow-hidden duration-300 l-2 peer-checked:max-h-auto peer-checked:h-1/1">
+					<p>
+						The text area below is fed into the program using the Function constructor, so it has access to
+						any default javascript function.
+					</p>
+					<br />
+					<p>
+						Additionally, the classes Thread and Log are fed into the function, meaning you can use the
+						following methods:
+					</p>
+					<ul class="list-disc list-outside [&_ul]:list-[revert] pl-5 mt-0">
+						<li class="p-2">
+							<span class="code"
+								>New Thread(worker_filename: string, initial_data: { [key: string]: string }, log_name:
+								string)</span
+							>
+							<p>
+								Creates a new thread with the given filename and initial data.
+								<span class="code">log_name</span> is optional, and defaults to "Thread".
+							</p>
+						</li>
+						<ul class="pl-5 list-outside ps-5">
+							<li class="p-2">
+								<span class="code">worker_filename: string</span>
+								<p>
+									Filename that the worker will start with. Because workers cannot share memory, the
+									file must not use members of any files in the main thread.
+								</p>
+							</li>
+							<li class="p-2">
+								<span class="code">initial_data: { [key: string]: string }</span>
+								<p>
+									This object will be sent to the worker upon instantiation. Any updates that the
+									worker makes to this data will be reflected in the Thread object. The Thread object
+									will not modify this data, only the worker. Can be <span class="code">{}</span> to
+									pass no data.
+								</p>
+							</li>
+							<li class="p-2">
+								<span class="code">log_name: string</span>
+								<p>This is the name that will be used when logging messages.</p>
+							</li>
+						</ul>
+
+						<li class="p-2">
+							<span class="code">Thread.start()</span>
+							<p>
+								Starts a thread in the same way Java's <span class="code">Thread.start()</span> would.
+							</p>
+						</li>
+						<li class="p-2">
+							<span class="code">Thread.join() </span>
+							<p>
+								Pauses the main thread in a similar way to how Java's
+								<span class="code">Thread.join()</span> would. Because this is javascript, the actual
+								return value is <span class="code">Promise&lt;void&gt;</span>, so we must use
+								<span class="code">await</span> before the promise. This will pause the main thread
+								until the awaited worker finishes. An example of this is
+								<span class="code">await new Thread('WorkerThread', {}).start()</span>.
+							</p>
+						</li>
+						<li class="p-2"><span class="code">Log.log(message: string)</span></li>
+					</ul>
 				</div>
 			</div>
 			<div class="flex flex-col items-stretch w-9/10">

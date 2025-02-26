@@ -1,14 +1,31 @@
 @import "tailwindcss";
 
 * {
-	font-family: "Helvetica Neue", sans-serif;
+	font-family: "Lexend", "Helvetica Neue", sans-serif;
 }
 
 body {
-	overflow: hidden
+	overflow: hidden;
 }
 
-/* Define the animatable CSS variables */
+@layer components {
+	.code {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+		padding: 0.25rem;
+		border-radius: 0.375rem;
+		background-color: oklch(0.269 0 0);
+		color: oklch(0.87 0 0);
+	}
+
+	ul p {
+		margin-top: .5rem;
+	}
+}
+
+/*
+ * Below here is for the background animation
+ */
+
 @property --x {
 	syntax: "<percentage>";
 	inherits: false;
@@ -46,13 +63,6 @@ body {
 	bottom: var(--y);
 	transform: rotate(-45deg) translateY(-27%) translateX(-25%);
 	z-index: -1;
-	background: linear-gradient(
-		90deg,
-		rgb(92, 255, 187),
-		#e9b200,
-		rgb(92, 255, 187),
-		#e9b200,
-		rgb(92, 255, 187)
-	);
+	background: linear-gradient(90deg, rgb(92, 255, 187), #e9b200, rgb(92, 255, 187), #e9b200, rgb(92, 255, 187));
 	animation: gradient-slide 18s infinite alternate ease;
 }
