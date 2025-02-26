@@ -9,7 +9,8 @@
 	"scripts": {
 		"build": "vite build",
 		"preview": "vite preview",
-		"dev": "vite"
+		"dev": "vite",
+		"doc": "typedoc src/index.ts --entryPointStrategy Expand src --out docs"
 	},
 	"dependencies": {
 		"@types/node": "^22.13.4",
@@ -18,6 +19,7 @@
 	},
 	"devDependencies": {
 		"@tailwindcss/vite": "^4.0.8",
-		"tailwindcss": "^4.0.8"
+		"tailwindcss": "^4.0.8",
+		"typedoc": "^0.27.9"
 	}
 }
