@@ -60,11 +60,9 @@
 	transform: translateX(-25%);
 	z-index: -1;
 	background: linear-gradient(-25deg, rgb(92, 255, 187), #e9b200, rgb(92, 255, 187), #e9b200, rgb(92, 255, 187));
-	animation: gradient-slide 2s infinite alternate ease;
-	mask-image: linear-gradient(white 0%, black 100%)
+	animation: gradient-slide 15s infinite alternate ease;
 }
 
 .gradient {
-	mask-image: linear-gradient(white 0%, transparent 200%);
-	overflow: hidden
+	mask-image: linear-gradient(black 0%, transparent 170%);
 }
