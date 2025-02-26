@@ -4,9 +4,7 @@
 	font-family: "Lexend", "Helvetica Neue", sans-serif;
 }
 
-body {
-	overflow: hidden;
-}
+
 
 @layer components {
 	.code {
@@ -46,23 +44,27 @@ body {
 @keyframes gradient-slide {
 	0% {
 		--x: -100%;
-		--y: -300%;
 	}
 	100% {
 		--x: 100%;
-		--y: -100%;
 	}
 }
 
 .gradient::before {
 	position: absolute;
 	content: "";
-	width: 600%;
-	height: 600%;
+	width: 400%;
+	height: 50%;
 	left: var(--x);
-	bottom: var(--y);
-	transform: rotate(-45deg) translateY(-27%) translateX(-25%);
+	top: 0%;
+	transform: translateX(-25%);
 	z-index: -1;
-	background: linear-gradient(90deg, rgb(92, 255, 187), #e9b200, rgb(92, 255, 187), #e9b200, rgb(92, 255, 187));
-	animation: gradient-slide 18s infinite alternate ease;
+	background: linear-gradient(-25deg, rgb(92, 255, 187), #e9b200, rgb(92, 255, 187), #e9b200, rgb(92, 255, 187));
+	animation: gradient-slide 2s infinite alternate ease;
+	mask-image: linear-gradient(white 0%, black 100%)
+}
+
+.gradient {
+	mask-image: linear-gradient(white 0%, transparent 200%);
+	overflow: hidden
 }
