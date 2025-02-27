@@ -9,10 +9,10 @@ export class Thread {
 	static async run(data: Dict) {
 		Thread.initData(data);
 		await Thread.synchronized(async () => {
-			Thread.print("Acquired Key")
-			await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
-		})
-		Thread.end()
+			Thread.print("Acquired Key");
+			await new Promise<void>((resolve) => setTimeout(() => resolve(), 1000));
+		});
+		Thread.end();
 	}
 
 	/**
@@ -25,8 +25,8 @@ export class Thread {
 	static async synchronized(callback: () => Promise<void>): Promise<void> {
 		// Request and wait for the key
 		Thread.request("key1");
-		await new Promise<void>(resolve => {
-			self.onmessage = event => {
+		await new Promise<void>((resolve) => {
+			self.onmessage = (event) => {
 				const [action, value] = [event.data.action, event.data.value];
 
 				// Catch any messages that give us the key
@@ -57,8 +57,7 @@ export class Thread {
 	 * @param data - The data to be set
 	 */
 	private static readonly initData = (data: Dict) => {
-		for (const [property, value] of Object.entries(data))
-			Thread.setData(property, value);
+		for (const [property, value] of Object.entries(data)) Thread.setData(property, value);
 	};
 
 	/*

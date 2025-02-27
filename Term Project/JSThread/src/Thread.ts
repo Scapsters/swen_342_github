@@ -42,12 +42,9 @@ export class Thread {
 	 * @param data - Data to be passed to the worker
 	 * @param name - For logging purposes
 	 */
-	constructor(worker_class_name: string, data: Dict, name: string) {
+	constructor(worker_class_name: string, data: Dict, name: string = "Thread") {
 		// Use a URL with import.meta.url for browser optimization
-		const workerPath = new URL(
-			`./Workers/${worker_class_name}.ts`,
-			import.meta.url
-		);
+		const workerPath = new URL(`./Workers/${worker_class_name}.ts`, import.meta.url);
 
 		// Initiaize worker and worker properties
 		this.worker = new Worker(workerPath.href, {
@@ -92,7 +89,7 @@ export class Thread {
 			case "release":
 				this.log.log(`Releasing ${value}`);
 				this.addKey(value);
-				Thread.keys[value].dequeue()
+				Thread.keys[value].dequeue();
 				this.giveTo(value, Thread.keys[value].peek());
 				break;
 
