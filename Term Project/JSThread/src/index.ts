@@ -28,7 +28,7 @@ function exampleOne() {
 function exampleTwo() {
 	(document.getElementById("code") as HTMLTextAreaElement).value = `const threads = [];
 for(let i = 0; i < 4; i++) {
-   threads.push(new Thread('WorkerThread', {}, \`Thread\${i}\`));
+   threads.push(new Thread('WorkerThread', {}, \`Thread\${i+1}\`));
 }
 
 const [t1, t2, t3, t4] = threads;
