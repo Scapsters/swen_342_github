@@ -18,10 +18,12 @@
 		</h1>
 		<div class="flex flex-col items-center h-screen pt-6 z-1 bg-zinc-50">
 			<div
-				class="m-4 duration-300 border-l-2 max-h-7 w-9/10 -border-slate-400 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1 duration:300"
+				class="m-4 duration-300 border-l-2 max-h-15 w-9/10 hover:bg-neutral-200 has-checked:bg-neutral-200 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1"
 			>
 				<input type="checkbox" id="overview" class="hidden peer" />
-				<label for="overview" class="ml-2 font-bold select-none"> Design Overview </label>
+				<label for="overview" class="block p-2 font-bold duration-300 select-none hover:bg-neutral-300">
+					Design Overview
+				</label>
 				<div class="h-0 ml-2 overflow-hidden duration-300 l-2 peer-checked:max-h-auto peer-checked:h-1/1">
 					<p>
 						A "Thread" is a stack being executed on a single processor. It's a list of instructions and
@@ -60,10 +62,10 @@
 				</div>
 			</div>
 			<div
-				class="m-4 duration-300 border-l-2 max-h-7 w-9/10 -border-slate-400 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1 duration:300"
+				class="m-4 duration-300 border-l-2 max-h-15 w-9/10 hover:bg-neutral-200 has-checked:bg-neutral-200 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1"
 			>
 				<input type="checkbox" id="documentation" class="hidden peer" />
-				<label for="documentation" class="ml-2 font-bold select-none"> Documentation </label>
+				<label for="documentation" class="block p-2 font-bold duration-300 select-none hover:bg-neutral-300"> Documentation </label>
 				<div class="h-0 ml-2 overflow-hidden duration-300 l-2 peer-checked:max-h-auto peer-checked:h-1/1">
 					<p>
 						The text area below is fed into the program using the Function constructor, so it has access to
@@ -145,13 +147,10 @@ Log.log('Hello World!')
 				>
 					Run
 				</button>
-				<div
-					id="console"
-					class="m-4 bg-gray-900 rounded-lg text-slate-200 h-80 border-t-slate-600 border-t-36"
-				>
+				<div id="console" class="m-4 bg-gray-900 rounded-lg text-slate-200 h-80 border-t-slate-600 border-t-36">
 					<p class="p-3 -mt-10 text-slate-200">Console</p>
 					<div id="output" class="pl-4 -mt-2 overflow-auto text-slate-200 h-1/1"></div>
-				</div>	
+				</div>
 			</div>
 		</div>
 	</body>
