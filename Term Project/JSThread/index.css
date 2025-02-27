@@ -4,8 +4,6 @@
 	font-family: "Lexend", "Helvetica Neue", sans-serif;
 }
 
-
-
 @layer components {
 	.code {
 		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
@@ -16,7 +14,7 @@
 	}
 
 	ul p {
-		margin-top: .5rem;
+		margin-top: 0.5rem;
 	}
 }
 

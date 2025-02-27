@@ -11,7 +11,7 @@
 		<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
 	</head>
 
-	<body class="text-slate-800">
+	<body class="overflow-x-hidden text-slate-800">
 		<h1 class="p-8 text-4xl font-bold text-center gradient text-white/85 w-1/1">
 			Threads in
 			<span class="underline text-sky-600/85 underline-offset-9">Typescript</span>
@@ -146,11 +146,12 @@ Log.log('Hello World!')
 					Run
 				</button>
 				<div
-					id="output"
-					class="p-3 overflow-auto bg-gray-900 rounded-lg text-slate-200 h-80 border-t-slate-600 border-t-36"
+					id="console"
+					class="m-4 bg-gray-900 rounded-lg text-slate-200 h-80 border-t-slate-600 border-t-36"
 				>
-					<p class="mb-3 -mt-10 text-slate-200">Console</p>
-				</div>
+					<p class="p-3 -mt-10 text-slate-200">Console</p>
+					<div id="output" class="pl-4 -mt-2 overflow-auto text-slate-200 h-1/1"></div>
+				</div>	
 			</div>
 		</div>
 	</body>
