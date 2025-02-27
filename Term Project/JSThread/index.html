@@ -17,14 +17,12 @@
 			<span class="underline text-sky-600/85 underline-offset-9">Typescript</span>
 		</h1>
 		<div class="flex flex-col items-center h-screen pt-6 z-1 bg-zinc-50">
-			<div
-				class="m-4 duration-300 border-l-2 max-h-15 w-9/10 hover:bg-neutral-200 has-checked:bg-neutral-200 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1"
-			>
+			<div class="collapsible-content-container">
 				<input type="checkbox" id="overview" class="hidden peer" />
-				<label for="overview" class="block p-2 font-bold duration-300 select-none hover:bg-neutral-300">
+				<label for="overview" class="collapsible-content-header">
 					Design Overview
 				</label>
-				<div class="h-0 ml-2 overflow-hidden duration-300 l-2 peer-checked:max-h-auto peer-checked:h-1/1">
+				<div class="collapsible-content">
 					<p>
 						A "Thread" is a stack being executed on a single processor. It's a list of instructions and
 						nothing more.
@@ -61,14 +59,12 @@
 					<p>An additional goal is to make it as similar as possible to using the same features in Java.</p>
 				</div>
 			</div>
-			<div
-				class="m-4 duration-300 border-l-2 max-h-15 w-9/10 hover:bg-neutral-200 has-checked:bg-neutral-200 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1"
-			>
+			<div class="collapsible-content-container">
 				<input type="checkbox" id="documentation" class="hidden peer" />
-				<label for="documentation" class="block p-2 font-bold duration-300 select-none hover:bg-neutral-300">
+				<label for="documentation" class="collapsible-content-header">
 					Documentation
 				</label>
-				<div class="h-0 ml-2 overflow-hidden duration-300 l-2 peer-checked:max-h-auto peer-checked:h-1/1">
+				<div class="collapsible-content">
 					<p>
 						The text area below is fed into the program using the Function constructor, so it has access to
 						any default javascript function.
@@ -81,7 +77,7 @@
 					<ul class="list-disc list-outside [&_ul]:list-[revert] pl-5 mt-0">
 						<li class="p-2">
 							<span class="code"
-								>New Thread(worker_filename: string, initial_data: { [key: string]: string }, log_name:
+								>new Thread(worker_filename: string, initial_data: { [key: string]: string }, log_name:
 								string)</span
 							>
 							<p>
@@ -137,22 +133,26 @@
 				<textarea
 					id="code"
 					spellcheck="false"
-					class="block w-1/1 p-3 font-mono! rounded-t-xl bg-neutral-900 text-white h-80 overflow-auto"
+					class="block w-1/1 p-3 outline-0 font-mono! rounded-t-xl bg-neutral-900 text-white h-80 overflow-auto"
 				>
 new Thread('WorkerThread', {}).start()
 Log.log('Hello World!')</textarea
 				>
 				<div class="block w-1/1 pl-3 pb-1 font-mono! rounded-b-xl bg-neutral-700 text-white">
-					<button id="start" class="duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white">Run</button>
-					<span class="text-xl text-neutral-500">|</span>
-					<button id="clearConsole" class="duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white">Clear Console</button>
-					<span class="text-xl text-neutral-500">|</span>
-					<button id="clearCode" class="duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white">Clear Code</button>
-					<span class="text-xl text-neutral-500">|</span>
-					<button id="Log Example" class="duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white">Log Example</button>
-					<span class="text-xl text-neutral-500">|</span>
-					<button id="Sync+Join Example" class="duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white">Sync+Join Example</button>
-					<span class="text-xl text-neutral-500">|</span>
+					<button id="start" class="code-button">Run</button>
+					<span class="code-button-divider">|</span>
+
+					<button id="clearConsole" class="code-button">Clear Console</button>
+					<span class="code-button-divider">|</span>
+
+					<button id="clearCode" class="code-button">Clear Code</button>
+					<span class="code-button-divider">|</span>
+
+					<button id="Log Example" class="code-button">Log Example</button>
+					<span class="code-button-divider">|</span>
+
+					<button id="Sync+Join Example" class="code-button">Sync+Join Example</button>
+					<span class="code-button-divider">|</span>
 				</div>
 				<div id="console" class="m-4 bg-gray-900 rounded-lg text-slate-200 h-80 border-t-slate-600 border-t-36">
 					<p class="p-3 -mt-10 text-slate-200">Console</p>
