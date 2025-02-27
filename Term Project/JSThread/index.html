@@ -65,7 +65,9 @@
 				class="m-4 duration-300 border-l-2 max-h-15 w-9/10 hover:bg-neutral-200 has-checked:bg-neutral-200 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1"
 			>
 				<input type="checkbox" id="documentation" class="hidden peer" />
-				<label for="documentation" class="block p-2 font-bold duration-300 select-none hover:bg-neutral-300"> Documentation </label>
+				<label for="documentation" class="block p-2 font-bold duration-300 select-none hover:bg-neutral-300">
+					Documentation
+				</label>
 				<div class="h-0 ml-2 overflow-hidden duration-300 l-2 peer-checked:max-h-auto peer-checked:h-1/1">
 					<p>
 						The text area below is fed into the program using the Function constructor, so it has access to
@@ -135,18 +137,23 @@
 				<textarea
 					id="code"
 					spellcheck="false"
-					class="p-3 font-mono! rounded-lg bg-neutral-900 text-white h-80 overflow-auto"
+					class="block w-1/1 p-3 font-mono! rounded-t-xl bg-neutral-900 text-white h-80 overflow-auto"
 				>
 new Thread('WorkerThread', {}).start()
-Log.log('Hello World!')
-				</textarea
+Log.log('Hello World!')</textarea
 				>
-				<button
-					id="start"
-					class="p-1 m-1 duration-150 border-4 bg-slate-100 rounded-xl w-15 border-slate-500 hover:border-teal-500 hover:bg-slate-200 active:bg-white"
-				>
-					Run
-				</button>
+				<div class="block w-1/1 pl-3 pb-1 font-mono! rounded-b-xl bg-neutral-700 text-white">
+					<button id="start" class="duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white">Run</button>
+					<span class="text-xl text-neutral-500">|</span>
+					<button id="clearConsole" class="duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white">Clear Console</button>
+					<span class="text-xl text-neutral-500">|</span>
+					<button id="clearCode" class="duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white">Clear Code</button>
+					<span class="text-xl text-neutral-500">|</span>
+					<button id="Log Example" class="duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white">Log Example</button>
+					<span class="text-xl text-neutral-500">|</span>
+					<button id="Sync+Join Example" class="duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white">Sync+Join Example</button>
+					<span class="text-xl text-neutral-500">|</span>
+				</div>
 				<div id="console" class="m-4 bg-gray-900 rounded-lg text-slate-200 h-80 border-t-slate-600 border-t-36">
 					<p class="p-3 -mt-10 text-slate-200">Console</p>
 					<div id="output" class="pl-4 -mt-2 overflow-auto text-slate-200 h-1/1"></div>

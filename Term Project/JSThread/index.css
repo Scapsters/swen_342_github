@@ -58,7 +58,7 @@
 	transform: translateX(-25%);
 	z-index: -1;
 	background: linear-gradient(-25deg, rgb(92, 255, 187), #e9b200, rgb(92, 255, 187), #e9b200, rgb(92, 255, 187));
-	animation: gradient-slide 15s infinite alternate ease;
+	animation: gradient-slide 10s infinite alternate ease;
 }
 
 .gradient {
