@@ -21,26 +21,36 @@ function clearCode() {
 	(document.getElementById("code") as HTMLTextAreaElement).value = "";
 }
 
-function exampleOne() {
-	(document.getElementById("code") as HTMLTextAreaElement).value = `Log.log("Hello, world!");`;
+function setExample(index: number) {
+	(document.getElementById("code") as HTMLTextAreaElement).value = examples[index];
 }
 
-function exampleTwo() {
-	(document.getElementById("code") as HTMLTextAreaElement).value = `const threads = [];
-for(let i = 0; i < 4; i++) {
-   threads.push(new Thread('WorkerThread', {}, \`Thread\${i+1}\`));
+function updateScroll() {
+	const y_scroll = window.scrollY;
+	console.log(document.documentElement)
+	console.log(document.documentElement.style)
+	document.documentElement.style.setProperty("--y-scroll", y_scroll.toString() + "px");
 }
 
-const [t1, t2, t3, t4] = threads;
-
-t1.start().join() // Main thread will stop here
-t2.start() // All 3 threads will start at once, but only one will have the key at a time.
-t3.start()
-t4.start()`;
-}
+document.addEventListener("scroll", updateScroll);
 
 document.getElementById("start")!.addEventListener("click", start);
 document.getElementById("clearConsole")!.addEventListener("click", clearConsole);
 document.getElementById("clearCode")!.addEventListener("click", clearCode);
-document.getElementById("Log Example")!.addEventListener("click", exampleOne);
-document.getElementById("Sync+Join Example")!.addEventListener("click", exampleTwo);
+document.getElementById("Log Example")!.addEventListener("click", _ => setExample(0));
+document.getElementById("Sync+Join Example")!.addEventListener("click", _ => setExample(1));
+
+const examples = [
+	`Log.log("Hello, world!");`,
+	`const threads = [];
+	for(let i = 0; i < 4; i++) {
+	   threads.push(new Thread('WorkerThread', {}, \`Thread\${i+1}\`));
+	}
+	
+	const [t1, t2, t3, t4] = threads;
+	
+	t1.start().join() // Main thread will stop here
+	t2.start() // All 3 threads will start at once, but only one will have the key at a time.
+	t3.start()
+	t4.start()`,
+	]
