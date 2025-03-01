@@ -5,7 +5,9 @@
 }
 
 :root {
-	--y-scroll: 0px;
+	--y-scroll: 0px; /* For header animation */
+	--x: 0%; /* For header animation */
+	--y: 0%; /* For header animation */
 }
 
 @layer components {
@@ -28,27 +30,27 @@
 	ul > li::marker {
 		font-size: 2em;
 		margin-left: 1em;
-		padding: 50px
+		padding: 50px;
 	}
 
 	.code-button {
-		@apply duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white
+		@apply duration-75 text-neutral-300 hover:text-cyan-500 hover:pl-2 hover:pr-2 active:text-white;
 	}
-	
+
 	.code-button-divider {
-		@apply text-xl text-neutral-500
+		@apply text-xl text-neutral-500;
 	}
-	
+
 	.collapsible-content {
-		@apply h-0 ml-2 overflow-hidden duration-300 peer-checked:max-h-auto peer-checked:h-1/1
+		@apply h-0 ml-2 overflow-hidden duration-300 peer-checked:max-h-auto peer-checked:h-1/1;
 	}
-	
+
 	.collapsible-content-container {
-		@apply m-4 duration-300 border-l-2 max-h-15 w-9/10 hover:bg-neutral-200 has-checked:bg-neutral-200 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1
+		@apply m-4 duration-300 border-l-2 max-h-15 w-9/10 hover:bg-neutral-200 has-checked:bg-neutral-200 has-checked:border-sky-700 has-checked:border-l-6 has-checked:max-h-1/1;
 	}
-	
+
 	.collapsible-content-header {
-		@apply block p-2 font-bold duration-300 select-none hover:bg-neutral-300
+		@apply block p-2 font-bold duration-300 select-none hover:bg-neutral-300;
 	}
 }
 
@@ -66,11 +68,6 @@
 	syntax: "<percentage>";
 	inherits: false;
 	initial-value: 0%;
-}
-
-:root {
-	--x: 0%;
-	--y: 0%;
 }
 
 @keyframes gradient-slide {
