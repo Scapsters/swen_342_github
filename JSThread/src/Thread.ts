@@ -47,7 +47,7 @@ export class Thread {
 		const workerPath = new URL(`./Workers/${worker_class_name}.ts`, import.meta.url);
 
 		// Initiaize worker and worker properties
-		this.worker = new Worker(workerPath.href, {
+		this.worker = new Worker(workerPath, {
 			type: "module",
 		});
 		this.worker.onerror = (event) => console.error("Worker error", event);
