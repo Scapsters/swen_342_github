@@ -42,7 +42,7 @@
 	}
 
 	.collapsible-content {
-		@apply h-0 ml-2 overflow-hidden duration-300 peer-checked:max-h-auto peer-checked:h-1/1;
+		@apply h-0 ml-2 overflow-hidden duration-300;
 	}
 
 	.collapsible-content-container {
