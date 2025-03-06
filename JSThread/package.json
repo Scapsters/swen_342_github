@@ -7,7 +7,7 @@
 	"type": "module",
 	"main": "index.js",
 	"scripts": {
-		"build": "vite build --base ./",
+		"build": "vite build --base /JSThread/dist",
 		"preview": "vite preview",
 		"dev": "vite",
 		"doc": "typedoc src/index.ts --entryPointStrategy Expand src --out docs"
