@@ -1,7 +1,7 @@
 import Log from "./Log.js";
 import Queue from "./Queue.js";
-import CounterThread from './Workers/CounterThread?worker&url';
-import WorkerThread from './Workers/WorkerThread?worker&url';
+import CounterThreadURL from './Workers/CounterThread?worker&url';
+import WorkerThreadURL from './Workers/WorkerThread?worker&url';
 
 export class Thread {
 	// All Threads share the same set of keys
@@ -45,24 +45,41 @@ export class Thread {
 	 * @param name - For logging purposes
 	 */
 	constructor(worker_class_name: string, data: Dict, name: string = "Thread") {
-		const workerUrls: { [key: string]: URL } = {
-			"CounterThread": CounterThread,
-			"WorkerThread": WorkerThread,
+
+		// Dynamically creating URLs will trigger a Vite bug. This is a workaround.
+		const workerFactories: Dict = {
+			"WorkerThread": this.createWorkerThread,
+			"CounterThread": this.createCounterThread,
 		}
 
-		// Use a URL with import.meta.url for browser optimization
-		const workerPath = new URL(workerUrls[worker_class_name], import.meta.url);
-
 		// Initiaize worker and worker properties
-		this.worker = new Worker(workerPath, {
-			type: "module",
-		});
+		this.worker = workerFactories[worker_class_name]();
 		this.worker.onerror = (event) => console.error("Worker error", event);
 		this.worker.onmessage = this.onmessage.bind(this);
 
 		this.data = data; // This will be passed to the worker upon start
 
 		this.log = new Log(name); // Create a log to append the threads name to all messages
+	}
+
+	/**
+	 * @returns Worker
+	 */
+	private createCounterThread() {
+		const workerPath = new URL(CounterThreadURL, import.meta.url);
+		return new Worker(workerPath, {
+			type: "module",
+		});
+	}
+
+	/**
+	 * @returns Worker
+	 */
+	private createWorkerThread() {
+		const workerPath = new URL(WorkerThreadURL, import.meta.url);
+		return new Worker(workerPath, {
+			type: "module",
+		});
 	}
 
 	private readonly worker: Worker;
