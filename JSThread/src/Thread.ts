@@ -1,5 +1,7 @@
 import Log from "./Log.js";
 import Queue from "./Queue.js";
+import CounterThread from './Workers/CounterThread?worker&url';
+import WorkerThread from './Workers/WorkerThread?worker&url';
 
 export class Thread {
 	// All Threads share the same set of keys
@@ -43,8 +45,13 @@ export class Thread {
 	 * @param name - For logging purposes
 	 */
 	constructor(worker_class_name: string, data: Dict, name: string = "Thread") {
+		const workerUrls: { [key: string]: URL } = {
+			"CounterThread": CounterThread,
+			"WorkerThread": WorkerThread,
+		}
+
 		// Use a URL with import.meta.url for browser optimization
-		const workerPath = new URL(`./Workers/${worker_class_name}.ts`, import.meta.url);
+		const workerPath = new URL(workerUrls[worker_class_name], import.meta.url);
 
 		// Initiaize worker and worker properties
 		this.worker = new Worker(workerPath, {
