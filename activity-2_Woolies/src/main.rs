@@ -7,6 +7,9 @@ use crate::city::City;
 mod random;
 use crate::random::RandomVariant;
 
+mod bridge;
+use crate::bridge::Bridge;
+
 use rand::Rng;
 use std::thread;
 
