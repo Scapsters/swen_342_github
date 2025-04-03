@@ -1,0 +1,20 @@
+Philosopher 1 is thinking for 454 milliseconds.
+Philosopher 2 is thinking for 888 milliseconds.
+Philosopher 4 is thinking for 649 milliseconds.
+Philosopher 0 is thinking for 844 milliseconds.
+Philosopher 3 is thinking for 791 milliseconds.
+Philosopher 1 goes for the right fork.
+Philosopher 3 goes for the right fork.
+Philosopher 2 goes for the right fork.
+Philosopher 2 has the right fork.
+Philosopher 3 has the right fork.
+Philosopher 0 goes for the right fork.
+Philosopher 3 goes for the left fork.
+Philosopher 4 goes for the right fork.
+Philosopher 4 has the right fork.
+Philosopher 1 has the right fork.
+Philosopher 2 goes for the left fork.
+Philosopher 0 has the right fork.
+Philosopher 4 goes for the left fork.
+Philosopher 1 goes for the left fork.
+Philosopher 0 goes for the left fork.
