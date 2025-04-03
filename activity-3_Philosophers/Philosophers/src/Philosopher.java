@@ -9,6 +9,7 @@ public class Philosopher implements Runnable {
     private int nTimes;
     private long thinkMillis;
     private long eatMillis;
+    private boolean isLeftHanded = false; // Default to right-handed
 
     public Philosopher(int id, Fork left, Fork right, int nTimes, long thinkMillis, long eatMillis) {
         this.id = id;
@@ -17,6 +18,11 @@ public class Philosopher implements Runnable {
         this.nTimes = nTimes;
         this.thinkMillis = thinkMillis;
         this.eatMillis = eatMillis;
+    }
+
+    public Philosopher(int id, Fork left, Fork right, int nTimes, long thinkMillis, long eatMillis, boolean isLeftHanded) {
+        this(id, left, right, nTimes, thinkMillis, eatMillis);
+        this.isLeftHanded = isLeftHanded;
     }
     
     public void run() {
@@ -29,13 +35,24 @@ public class Philosopher implements Runnable {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            System.out.println("Philosopher " + id + " goes for the right fork.");
-            right.acquire();
-            System.out.println("Philosopher " + id + " has the right fork.");
-            Thread.yield();
-            System.out.println("Philosopher " + id + " goes for the left fork.");
-            left.acquire();
-            System.out.println("Philosopher " + id + " has the left fork.");
+            // If left handed go for the left fork first
+            if (isLeftHanded) {
+                System.out.println("Philosopher " + id + " goes for the left fork.");
+                left.acquire();
+                System.out.println("Philosopher " + id + " has the left fork.");
+                Thread.yield();
+                System.out.println("Philosopher " + id + " goes for the right fork.");
+                right.acquire();
+                System.out.println("Philosopher " + id + " has the right fork.");
+            } else {
+                System.out.println("Philosopher " + id + " goes for the right fork.");
+                right.acquire();
+                System.out.println("Philosopher " + id + " has the right fork.");
+                Thread.yield();
+                System.out.println("Philosopher " + id + " goes for the left fork.");
+                left.acquire();
+                System.out.println("Philosopher " + id + " has the left fork.");
+            }
             long eatTime = eatMillis == 0 ? 0 : random.nextLong(eatMillis);
             System.out.println("Philosopher " + id + " eats for " + eatTime + " milliseconds.");
             try {

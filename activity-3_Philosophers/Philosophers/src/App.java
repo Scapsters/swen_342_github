@@ -31,7 +31,12 @@ public class App {
 
         Philosopher[] philosophers = new Philosopher[np];
         for (int i = 0; i < np; i++) {
-            philosophers[i] = new Philosopher(i, forks[i], forks[(i + 1) % np], nt, tm, em);
+            // First philosopher is left-handed
+            if(i == 0) {
+                philosophers[i] = new Philosopher(i, forks[i], forks[(i + 1) % np], nt, tm, em, true);
+            } else {
+                philosophers[i] = new Philosopher(i, forks[i], forks[(i + 1) % np], nt, tm, em);
+            }
             new Thread(philosophers[i]).start();
         }
 
