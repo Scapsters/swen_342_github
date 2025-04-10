@@ -1,4 +1,4 @@
-#[derive(Clone)]
+#[derive(PartialEq, Clone)]
 pub enum City {
     Merctan,
     Sicstine,
